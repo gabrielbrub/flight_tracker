@@ -29,7 +29,6 @@ class _FlightFormState extends State<FlightForm> {
 
   @override
   Widget build(BuildContext context) {
-    String dateString;
     return Scaffold(
       appBar: AppBar(
         title: Text('Add Flight'),
@@ -45,7 +44,7 @@ class _FlightFormState extends State<FlightForm> {
             TextField(
               controller: _numberController,
               decoration: InputDecoration(
-                labelText: 'Flight Number',
+                labelText: 'Flight Number (iata)',
               ),
               style: TextStyle(
                 fontSize: 24.0,

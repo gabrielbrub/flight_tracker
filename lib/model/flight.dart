@@ -20,11 +20,10 @@ class Flight {
   int index=0;
 
   String getUrl(){
-    number = number.trim();//remover trim(?)
     date = date.substring(0,10);
-    number = number.replaceAll(RegExp(r"\s\b|\b\s"), ""); //remover "ponto" do num voo
-    print('NUMBER E NAME:$number,$airline');
-    return ("https://aerodatabox.p.rapidapi.com/flights/$number/$date"); //$baseUrl&flight_number=$returnNumber&airline_name=$airline
+    date = date.trim();
+    number = number.replaceAll(RegExp(r"\s\b|\b\s"), "");
+    return ("https://aerodatabox.p.rapidapi.com/flights/$number/$date");
   }
 
   Flight(

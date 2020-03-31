@@ -7,6 +7,7 @@ void main() => runApp(FlightTracker());
 class FlightTracker extends StatelessWidget {
 @override
   Widget build(BuildContext context) {
+//  wipe file
 //  IoHelper ioh = IoHelper();
 //  ioh.write('', true);
     return MaterialApp(

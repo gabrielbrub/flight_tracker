@@ -49,42 +49,27 @@ class FlightsList extends StatefulWidget {
 
 class _FlightsListState extends State<FlightsList> {
 
-  IoHelper iohelper = IoHelper();
+  IoHelper ioHelper = IoHelper();
   NetworkHelper netHelper = NetworkHelper();
-  //bool _useAPI = true; //mudar pra true
   String _lastUpdated;
 
-  
-//  void initState() {
-//      super.initState();
-//      updateUI();
-//     // _useAPI = false;
-//    }
 
-
-  Future<List<Flight>> updateUI() {
+  Future<List<Flight>> updateUI() async {
       var formatter = new DateFormat('HH:mm');
       setState(() {
         _lastUpdated = formatter.format(DateTime.now());
       });
-      print('PAINT>> $_lastUpdated');
-      print('api tRUE');
-      return netHelper.updateFlights();
-    //useAPI = false;
-    return iohelper.getFlights();
+      return netHelper.updateFlights();//netHelper.updateFlights(); ioHelper.getFlights();
   }
 
   @override
   Widget build(BuildContext context) {
-    print('BUILD!');
     return FutureBuilder(
-        future: updateUI(),//getFlights(), iohelper.read(), //iohelper.getFlights(), Future.delayed(Duration(milliseconds: 500)).then((value) => getFlights()),
+        future: updateUI(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            print('hasDATA');
             List<Flight> flights = snapshot.data;
             if (flights.isNotEmpty) {
-              print('NOT EMPTY!');
               return Column(
                 children: <Widget>[
                   Container(
@@ -123,7 +108,7 @@ class _FlightsListState extends State<FlightsList> {
                                               child: Padding(
                                                 padding: const EdgeInsets.symmetric(horizontal: 8),
                                                 child: Align(child: IconButton(icon: Icon(Icons.delete), onPressed: () async{
-                                                  await iohelper.deleteFlightAt(index);
+                                                  await ioHelper.deleteFlightAt(index);
                                                   setState(() {
                                                     flights.removeAt(index);
                                                   });
@@ -245,33 +230,9 @@ class _FlightsListState extends State<FlightsList> {
         });
   }
 
-//  String formatDate(String date){
-//    if(date == 'U/A')
-//      return 'U/A';
-//    var newDateTimeObj = new DateFormat("yyyy-mm-dd HH:mm").parse(date.substring(0,16));
-//    print('PAU:' +date.substring(0,16));
-//    return flight.getWeekday(departure: departure) + ', ' + DateFormat('Hm').format(newDateTimeObj);
-//  }
-
-//  String getWeekday(String date){
-//    if(date == 'U/A')
-//      return 'U/A';
-//    date = date.substring(0,16);
-//    print(date);
-//    var newDateTimeObj = new DateFormat("yyyy-mm-dd HH:mm").parse(date);
-//    return (DateFormat('EEE').format(newDateTimeObj).substring(0, 3) + ' ' + newDateTimeObj.day.toString());
-//  }
-
-//  String getTime(String dateTime){
-//    if(dateTime == 'U/A')
-//      return 'U/A';
-//    dateTime = dateTime.substring(0,16);
-//    var newDateTimeObj = new DateFormat("yyyy-mm-dd HH:mm").parse(dateTime.trim());
-//    return DateFormat('Hm').format(newDateTimeObj);
-//  }
 
   Color selectFlightColor(String status){
-    if(status == 'Canceled')
+    if(status == 'Canceled' || status == 'CanceledUncertain')
       return Colors.red[200];
     if(status == 'Delayed')
       return Colors.yellow[200];
@@ -279,8 +240,7 @@ class _FlightsListState extends State<FlightsList> {
   }
 
   MaterialColor selectStatusColor(String status){
-    print('STATUS: $status');
-    if(status == 'Canceled')
+    if(status == 'Canceled' || status == 'CanceledUncertain')
       return Colors.red;
     if(status == 'Delayed')
       return Colors.yellow;

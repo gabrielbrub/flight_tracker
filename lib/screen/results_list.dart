@@ -14,7 +14,6 @@ class ResultsList extends StatelessWidget {
       body: ListView.builder(
         itemCount: flights.length,
           itemBuilder: (context, index){
-          print('building result, flight dep: ${flights[index].scheduledDep}');
             return Card(
               child: ListTile(
                 leading: Icon(Planecons.flight_1),

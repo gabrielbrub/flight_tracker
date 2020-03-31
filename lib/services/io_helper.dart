@@ -5,6 +5,8 @@ import 'package:path_provider/path_provider.dart';
 class IoHelper {
 
   save(Flight flight) async {
+    if(flight.date==null)
+      return;
     final String str = ('${flight.number},${flight.airline},${flight.date},${flight.destination},'
         '${flight.destIata},${flight.terminal},${flight.gate},${flight.status},${flight.origin},'
         '${flight.originIata},${flight.aircraftModel},${flight.scheduledDep},${flight.estimatedDep},'
@@ -18,11 +20,9 @@ class IoHelper {
     List<String> flightStr = fileText.split(';');
     List<Flight> flights = List<Flight>();
     for(String str in flightStr){
-      print(str);
       if(str.isEmpty)
         return flights;
       flightData = str.split(',');
-      //Flight ftr = Flight(flightData[0], flightData[1], flightData[2], flightData[3], flightData[5], int.parse(flightData[4]));
       flights.add(Flight(flightData[0], flightData[1], flightData[2], flightData[3], flightData[4], flightData[5], flightData[6]
           ,flightData[7],flightData[8],flightData[9],flightData[10],flightData[11],flightData[12],flightData[13], flightData[14],
            int.parse(flightData[15])));
@@ -43,31 +43,21 @@ class IoHelper {
     try {
       final Directory directory = await getApplicationDocumentsDirectory();
       final File file = File('${directory.path}/my_file.txt');
-      text = await file.readAsString(); //trocar por read line
+      text = await file.readAsString();
     } catch (e) {
       print("Couldn't read file");
+      text = '';
     }
-    print('read: TEXTOOOOOOOOOOO: ' + text);
+    print('read: ' + text);
     return text;
   }
 
-//  static delete() async{
-//    final Directory directory = await getApplicationDocumentsDirectory();
-//    final File file = File('${directory.path}/my_file.txt');
-//    await file.delete(recursive: true);
-//  }
 
-  deleteFlightAt(int index) async{ //ALT: RECEBE INDEX E DELETA NAQUELA POS
+  deleteFlightAt(int index) async{
     String text = await read();
     List<String> flights = text.split(';');
     flights.removeAt(index);
-    //FLIGHTS = FLIGHTS.REMOVEAT(INDEX)
-////    for(int index = 0; index<flights.length; index++) {
-////      if(flights[index].contains(flight.date) && flights[index].contains(flight.number) && flights[index].contains(flight.index.toString()))
-////        flights.removeAt(index);
-////    }
     text = flights.join(';');
-    print('TEXTO APOS DELETE: $text');
     await write(text, true);
   }
 
