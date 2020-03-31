@@ -2,9 +2,11 @@
 
 Aplicativo para rastreamento de voo em Flutter.
 
-Obs: Devido a limitação na cobertura da API, alguns voos não terão todos os dados disponíveis.
+Obs: Devido à limitação na cobertura da API, alguns voos não terão todos os dados disponíveis.
 Sugiro testar com aeroportos importantes:
+
 https://www.flightradar24.com/data/airports/ams
+
 https://www.flightradar24.com/data/airports/lax/departures
 
 ## Feito com
