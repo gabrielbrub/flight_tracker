@@ -2,7 +2,7 @@
 
 Aplicativo para rastreamento de voo em Flutter.
 
-Obs: Devido à limitação na cobertura da API, alguns voos não terão todos os dados disponíveis.
+Obs: Devido à limitação na cobertura da [API](https://rapidapi.com/squawk7000/api/aerodatabox), alguns voos não terão todos os dados disponíveis.
 Sugiro testar com aeroportos importantes:
 
 https://www.flightradar24.com/data/airports/ams
