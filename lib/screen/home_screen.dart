@@ -58,7 +58,6 @@ class _FlightsListState extends State<FlightsList> {
     updateUI() {
       var formatter = new DateFormat('HH:mm');
       setState(() {
-        print('SETUPDATE');
         _lastUpdated = formatter.format(DateTime.now());
         _future = netHelper.updateFlights();
       });
@@ -76,6 +75,8 @@ class _FlightsListState extends State<FlightsList> {
     return FutureBuilder(
         future: _future,//updateUI(),
         builder: (context, snapshot) {
+          if(snapshot.connectionState == ConnectionState.waiting)
+            return LinearProgressIndicator();
           if (snapshot.hasData) {
             List<Flight> flights = snapshot.data;
             if (flights.isNotEmpty) {
@@ -232,11 +233,8 @@ class _FlightsListState extends State<FlightsList> {
                 ],
               );
             }
-            if(snapshot.connectionState == ConnectionState.done){
-              return Center(child: Text('Empty'));
-            }
           }
-          return LinearProgressIndicator();
+          return Center(child: Text('Empty'));
         });
   }
 
