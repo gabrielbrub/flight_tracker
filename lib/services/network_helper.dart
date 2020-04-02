@@ -11,9 +11,7 @@ class NetworkHelper {
   Future<List<Flight>> updateFlights() async {
     IoHelper ioh = IoHelper();
     List<Flight> flights = await ioh.getFlights();
-    if(flights.isNotEmpty)
-      return findAll(flights);
-    return [];
+    return findAll(flights);
   }
 
   Future<List<Flight>> searchFlights(String flightNumber, DateTime flightDate) async {
@@ -38,7 +36,8 @@ class NetworkHelper {
   }
 
   Future<List<Flight>> findAll(List<Flight> flights) async {
-    List<Flight> flightReturn = List<Flight>();
+    List<Flight> flightReturn = [];
+    //print('URL: ' + flights[0].getUrl());
     for (Flight fl in flights) {
       final http.Response response = await http.get(fl.getUrl(), headers: {
         'x-rapidapi-host': 'aerodatabox.p.rapidapi.com',

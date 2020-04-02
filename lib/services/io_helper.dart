@@ -5,9 +5,9 @@ import 'package:path_provider/path_provider.dart';
 class IoHelper {
 
   save(Flight flight) async {
-    if(flight.date==null)
+    if(flight.scheduledDep==null)
       return;
-    final String str = ('${flight.number},${flight.airline},${flight.date},${flight.destination},'
+    final String str = ('${flight.number},${flight.airline},${flight.destination},'
         '${flight.destIata},${flight.terminal},${flight.gate},${flight.status},${flight.origin},'
         '${flight.originIata},${flight.aircraftModel},${flight.scheduledDep},${flight.estimatedDep},'
         '${flight.scheduledArr},${flight.estimatedArr},${flight.index};');
@@ -24,8 +24,7 @@ class IoHelper {
         return flights;
       flightData = str.split(',');
       flights.add(Flight(flightData[0], flightData[1], flightData[2], flightData[3], flightData[4], flightData[5], flightData[6]
-          ,flightData[7],flightData[8],flightData[9],flightData[10],flightData[11],flightData[12],flightData[13], flightData[14],
-           int.parse(flightData[15])));
+          ,flightData[7],flightData[8],flightData[9],flightData[10],flightData[11],flightData[12],flightData[13], int.parse(flightData[14])));
     }
     return flights;
   }

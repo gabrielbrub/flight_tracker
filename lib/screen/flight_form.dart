@@ -104,7 +104,17 @@ class _FlightFormState extends State<FlightForm> {
                    });
                     _io = IoHelper();
                     List<Flight> flights = await _netHelper.searchFlights(
-                        _numberController.text, _selectedDate);
+                        _numberController.text, _selectedDate).catchError((_){
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return errorDialog(title: 'Request timeout', content: 'Please try again later.');
+                        },
+                      );
+                      setState(() {
+                        _isLoading = false;
+                      });
+                    });
                     if (flights.length > 1) {
                       _isLoading = true;
                       final Flight resultFlight = await Navigator.of(context).push(
@@ -120,18 +130,7 @@ class _FlightFormState extends State<FlightForm> {
                       showDialog(
                         context: context,
                         builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: Text("No results found"),
-                            content: Text('Please check your input.'),
-                            actions: [
-                              FlatButton(
-                                child: Text("OK"),
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                              ),
-                            ],
-                          );
+                          return errorDialog(title: 'No results found', content: 'Please check your input');
                         },
                       );
                     } else {
@@ -151,6 +150,21 @@ class _FlightFormState extends State<FlightForm> {
   _saveFlight(Flight flight) async{
     await _io.save(flight);
     Navigator.pop(context);
+  }
+
+  Widget errorDialog({String title, String content}){
+    return AlertDialog(
+      title: Text(title),
+      content: Text(content),
+      actions: [
+        FlatButton(
+          child: Text("OK"),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+      ],
+    );
   }
 }
 

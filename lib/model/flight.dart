@@ -1,10 +1,9 @@
-import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
 
 class Flight {
   String number;
   final String airline;
-  String date;
+  //String date;
   final String status;
   final String destination;
   final String destIata;
@@ -20,8 +19,7 @@ class Flight {
   int index=0;
 
   String getUrl(){
-    date = date.substring(0,10);
-    date = date.trim();
+    String date = scheduledDep.substring(0,10);
     number = number.replaceAll(RegExp(r"\s\b|\b\s"), "");
     return ("https://aerodatabox.p.rapidapi.com/flights/$number/$date");
   }
@@ -29,7 +27,7 @@ class Flight {
   Flight(
       this.number,
       this.airline,
-      this.date,
+      //this.date,
       this.destination,
       this.destIata,
       this.terminal,
@@ -48,7 +46,7 @@ class Flight {
 
   @override
   String toString() {
-    return 'Flight{number: $number, airline: $airline, date: $date}';
+    return 'Flight{number: $number, airline: $airline, date: $scheduledDep}';
   }
 
   getTime({bool departure, bool scheduled}){
@@ -98,7 +96,7 @@ class Flight {
       : number = json['number'],
         airline = json['airline']['name'],
         status = json['status'],
-        date = json['departure']['scheduledTimeLocal'],
+        //date = json['departure']['scheduledTimeLocal'],
 //        index = 0,
         destination = json['arrival']['airport']['municipalityName'] ?? 'N/A',
         destIata = json['arrival']['airport']['iata'] ?? 'N/A',

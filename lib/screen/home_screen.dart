@@ -31,7 +31,7 @@ class HomeScreen extends StatelessWidget {
             MaterialPageRoute(
               builder: (context) => FlightForm(),
             ),
-          );
+          ).then((_){globalKey.currentState.updateUI();});
         },
         child: Icon(
           Icons.add,
@@ -52,20 +52,29 @@ class _FlightsListState extends State<FlightsList> {
   IoHelper ioHelper = IoHelper();
   NetworkHelper netHelper = NetworkHelper();
   String _lastUpdated;
+  Future<List<Flight>> _future;
 
 
-  Future<List<Flight>> updateUI() async {
+    updateUI() {
       var formatter = new DateFormat('HH:mm');
       setState(() {
+        print('SETUPDATE');
         _lastUpdated = formatter.format(DateTime.now());
+        _future = netHelper.updateFlights();
       });
-      return netHelper.updateFlights();//netHelper.updateFlights(); ioHelper.getFlights();
+      //return netHelper.updateFlights();
+  }
+
+  @override
+  void initState() {
+      updateUI();
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: updateUI(),
+        future: _future,//updateUI(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             List<Flight> flights = snapshot.data;
@@ -223,8 +232,9 @@ class _FlightsListState extends State<FlightsList> {
                 ],
               );
             }
-            if(snapshot.connectionState == ConnectionState.done)
+            if(snapshot.connectionState == ConnectionState.done){
               return Center(child: Text('Empty'));
+            }
           }
           return LinearProgressIndicator();
         });
