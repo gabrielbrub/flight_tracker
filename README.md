@@ -9,6 +9,13 @@ https://www.flightradar24.com/data/airports/ams
 
 https://www.flightradar24.com/data/airports/lax/departures
 
+## Capturas de Tela
+
+<p float="left" align="middle" hspace="20"">
+  <img src="https://i.imgur.com/mgkDvzK.jpg" height="740" width="360" />  
+  <img src="https://i.imgur.com/Jc8j44X.jpg" height="740" width="360" />  
+</p>
+
 ## Feito com
 
 * [Android Studio](https://developer.android.com/studio)
