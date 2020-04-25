@@ -34,7 +34,7 @@ class IoHelper {
     FileMode fm = overwrite?FileMode.write:FileMode.append;
     final Directory directory = await getApplicationDocumentsDirectory();
     File file = File('${directory.path}/my_file.txt');
-    await file.writeAsString(text, mode: fm,); //escrever line, sem apagar conteudo
+    await file.writeAsString(text, mode: fm,);
   }
 
   Future<String> read() async {

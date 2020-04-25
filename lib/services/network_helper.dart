@@ -8,6 +8,7 @@ import '../model/flight.dart';
 
 
 class NetworkHelper {
+
   Future<List<Flight>> updateFlights() async {
     IoHelper ioh = IoHelper();
     List<Flight> flights = await ioh.getFlights();
@@ -18,11 +19,12 @@ class NetworkHelper {
     List<Flight> flights = List<Flight>();
     String formattedDate = DateFormat('yyyy-MM-dd').format(flightDate);
     final http.Response response = await http.get(
+
         'https://aerodatabox.p.rapidapi.com/flights/$flightNumber/$formattedDate',
         headers: {
           'x-rapidapi-host': 'aerodatabox.p.rapidapi.com',
           'x-rapidapi-key': '$apiKey'
-        }).timeout(Duration(seconds: 15));
+        }).timeout(Duration(seconds: 10));
     if (response.statusCode == 200) {
       List<dynamic> decodedJson = jsonDecode(response.body);
       for (int i = 0; i < decodedJson.length; i++) {
@@ -37,7 +39,6 @@ class NetworkHelper {
 
   Future<List<Flight>> findAll(List<Flight> flights) async {
     List<Flight> flightReturn = [];
-    //print('URL: ' + flights[0].getUrl());
     for (Flight fl in flights) {
       final http.Response response = await http.get(fl.getUrl(), headers: {
         'x-rapidapi-host': 'aerodatabox.p.rapidapi.com',

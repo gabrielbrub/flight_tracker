@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flight_tracker/services/io_helper.dart';
 import 'package:flight_tracker/services/network_helper.dart';
 import 'package:flight_tracker/screen/results_list.dart';
@@ -16,7 +17,7 @@ class _FlightFormState extends State<FlightForm> {
   final TextEditingController _airlineController = TextEditingController();
   NetworkHelper _netHelper = NetworkHelper();
   DateTime _selectedDate;
-  IoHelper _io;
+  IoHelper _ioh;
   bool _isLoading;
 
 
@@ -38,8 +39,9 @@ class _FlightFormState extends State<FlightForm> {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: <Widget>[
-            Container(
-              child: _isLoading ? LinearProgressIndicator() : SizedBox(),
+            Visibility(
+              child: LinearProgressIndicator(),
+              visible: _isLoading,
             ),
             TextField(
               controller: _numberController,
@@ -102,19 +104,19 @@ class _FlightFormState extends State<FlightForm> {
                    setState(() {
                      _isLoading = true;
                    });
-                    _io = IoHelper();
+                    _ioh = IoHelper();
                     List<Flight> flights = await _netHelper.searchFlights(
-                        _numberController.text, _selectedDate).catchError((_){
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return errorDialog(title: 'Request timeout', content: 'Please try again later.');
-                        },
-                      );
+                        _numberController.text, _selectedDate).catchError((e){
+                          _showFailureDialog('Request timeout', 'Please try again later.', context);
                       setState(() {
                         _isLoading = false;
                       });
-                    });
+                    }, test: (e) => e is TimeoutException).catchError((e){
+                      _showFailureDialog('Error', 'Unknown error', context);
+                      setState(() {
+                        _isLoading = false;
+                      });
+                    }, test: (e) => e is Exception);
                     if (flights.length > 1) {
                       _isLoading = true;
                       final Flight resultFlight = await Navigator.of(context).push(
@@ -127,12 +129,7 @@ class _FlightFormState extends State<FlightForm> {
                       setState(() {
                         _isLoading = false;
                       });
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return errorDialog(title: 'No results found', content: 'Please check your input');
-                        },
-                      );
+                      _showFailureDialog('No results found', 'Please check your input', context);
                     } else {
                       flights[0].index=0;
                       _saveFlight(flights[0]);
@@ -148,11 +145,27 @@ class _FlightFormState extends State<FlightForm> {
   }
 
   _saveFlight(Flight flight) async{
-    await _io.save(flight);
+    await _ioh.save(flight);
     Navigator.pop(context);
   }
 
-  Widget errorDialog({String title, String content}){
+  _showFailureDialog(String title, String content, BuildContext context){
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return FailureDialog(title, content);
+      },
+    );
+  }
+
+}
+
+class FailureDialog extends StatelessWidget {
+  final String title, content;
+  FailureDialog(this.title, this.content);
+
+  @override
+  Widget build(BuildContext context) {
     return AlertDialog(
       title: Text(title),
       content: Text(content),
@@ -167,6 +180,7 @@ class _FlightFormState extends State<FlightForm> {
     );
   }
 }
+
 
 
 

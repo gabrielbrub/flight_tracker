@@ -18,10 +18,10 @@ class ResultsList extends StatelessWidget {
               child: ListTile(
                 leading: Icon(Planecons.flight_1),
                 title: Text(flights[index].number),
-                subtitle: Text(flights[index].scheduledDep),
+                subtitle: Text(flights[index].scheduledDep.substring(0, 16)),
                 onTap: (){
                   flights[index].index = index;
-                  Navigator.pop(context, flights[0]);
+                  Navigator.pop(context, flights[index]);
                 },
               ),
             );

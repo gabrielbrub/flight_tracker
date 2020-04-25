@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'screen/home_screen.dart';
-import 'services/io_helper.dart';
+
 
 void main() => runApp(FlightTracker());
 
@@ -13,13 +13,13 @@ class FlightTracker extends StatelessWidget {
     return MaterialApp(
       theme: ThemeData(
         primaryColor: Colors.blue[600],
-        accentColor: Colors.blueAccent[700],
+        accentColor: Colors.blueAccent[300],
         buttonTheme: ButtonThemeData(
-          buttonColor: Colors.blueAccent[700],
+          buttonColor: Colors.blueAccent[300],
           textTheme: ButtonTextTheme.primary,
         ),
       ),
-      home: DefaultTabController(length: 3, child: HomeScreen(),),
+      home: HomeScreen(),
     );
   }
 }
